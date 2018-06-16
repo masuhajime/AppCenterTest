@@ -1,0 +1,58 @@
+
+import React from 'react'
+import { StyleSheet, ScrollView, AppRegistry } from 'react-native'
+import { NativeRouter, Route, Link } from 'react-router-native'
+import { Container, Header, Content, Footer, FooterTab, Button, Text } from 'native-base';
+
+const PEEPS = [
+  { id: 0, name: 'Michelle', friends: [ 1, 2, 3 ] },
+  { id: 1, name: 'Sean', friends: [ 0, 3 ] },
+  { id: 2, name: 'Kim', friends: [ 0, 1, 3 ], },
+  { id: 3, name: 'David', friends: [ 1, 2 ] }
+]
+
+const find = (id) => PEEPS.find(p => p.id == id)
+
+const RecursiveExample = () => (
+  <NativeRouter>
+    <Person match={{ params: { id: 0 }, url: '' }}/>
+  </NativeRouter>
+)
+
+const Person = ({ match }) => {
+  const person = find(match.params.id)
+
+  return (
+    <ScrollView style={styles.container}>
+              <Button>
+            <Text>Click Me! </Text>
+          </Button>
+      <Text style={styles.header}>{person.name}’s Friends 1</Text>
+        {person.friends.map(id => (
+          <Link
+            key={id}
+            to={`${match.url}/${id}`}
+            style={styles.navItem}
+            underlayColor='#f0f4f7'>
+              <Text>{find(id).name}</Text>
+          </Link>
+        ))}
+      <Route path={`${match.url}/:id`} component={Person}/>
+
+      
+    </ScrollView>
+    
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 25,
+    padding: 10,
+  },
+  header: {
+    fontSize: 20,
+  },
+})
+
+export default RecursiveExample
